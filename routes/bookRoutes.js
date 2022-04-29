@@ -11,5 +11,6 @@ router
   router
 	.route('/:id')
 	.get(bookController.getBook)
+  .patch(bookController.updateBook)
 
 module.exports = router;

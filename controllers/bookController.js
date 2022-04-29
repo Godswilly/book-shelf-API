@@ -52,3 +52,15 @@ exports.getBook = async (req, res, next) => {
 		res.status(400).send(error.message);
 	}
 };
+
+exports.updateBook = async (req, res, next) => {
+	try {
+		const id = req.params.id;
+		const data = req.body;
+		const book = await admin.collection('books').doc(id);
+		await book.update(data);
+		res.send('Book record updated successfully');
+	} catch (error) {
+		res.status(400).send(error.message);
+	}
+};

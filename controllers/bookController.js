@@ -37,3 +37,18 @@ exports.getAllBooks = async (req, res, next) => {
 		res.status(400).send(error.message);
 	}
 };
+
+exports.getBook = async (req, res, next) => {
+	try {
+		const id = req.params.id;
+		const book = await admin.collection('books').doc(id);
+		const data = await book.get();
+		if (!data.exists) {
+			res.status(400).send('Book with the given ID not found');
+		} else {
+			res.send(data.data());
+		}
+	} catch (error) {
+		res.status(400).send(error.message);
+	}
+};

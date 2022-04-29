@@ -8,4 +8,8 @@ router
 	.get(bookController.getAllBooks)
 	.post(bookController.createBook);
 
+  router
+	.route('/:id')
+	.get(bookController.getBook)
+
 module.exports = router;

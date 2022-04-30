@@ -63,3 +63,13 @@ exports.updateUser = async (req, res, next) => {
 		res.status(400).send(error.message);
 	}
 };
+
+exports.deleteUser = async (req, res, next) => {
+	try {
+		const id = req.params.id;
+		await admin.collection('users').doc(id).delete();
+		res.send('User record deleted successfully');
+	} catch (error) {
+		res.status(400).send(error.message);
+	}
+};

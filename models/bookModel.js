@@ -6,7 +6,8 @@ class Book {
 		categories,
 		bookCover,
 		description,
-		publicationDate
+		publicationDate,
+		isArchived
 	) {
 		this.id = id;
 		this.title = title;
@@ -15,6 +16,7 @@ class Book {
 		this.bookCover = bookCover;
 		this.description = description;
 		this.publicationDate = publicationDate;
+		this.isArchived = isArchived;
 	}
 }
 

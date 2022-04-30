@@ -27,7 +27,8 @@ exports.getAllBooks = async (req, res, next) => {
 					doc.data().categories,
 					doc.data().bookCover,
 					doc.data().description,
-					doc.data().publicationDate
+					doc.data().publicationDate,
+					doc.data().isArchived
 				);
 				booksArray.push(book);
 			});

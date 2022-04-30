@@ -64,3 +64,13 @@ exports.updateBook = async (req, res, next) => {
 		res.status(400).send(error.message);
 	}
 };
+
+exports.deleteBook = async (req, res, next) => {
+	try {
+		const id = req.params.id;
+		await admin.collection('books').doc(id).delete();
+		res.send('Book record deleted successfully');
+	} catch (error) {
+		res.status(400).send(error.message);
+	}
+};

@@ -51,3 +51,15 @@ exports.getUser = async (req, res, next) => {
 		res.status(400).send(error.message);
 	}
 };
+
+exports.updateUser = async (req, res, next) => {
+	try {
+		const id = req.params.id;
+		const data = req.body;
+		const user = await admin.collection('users').doc(id);
+		await user.update(data);
+		res.send('User record updated successfully');
+	} catch (error) {
+		res.status(400).send(error.message);
+	}
+};

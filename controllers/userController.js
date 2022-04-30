@@ -36,3 +36,18 @@ exports.getAllUsers = async (req, res, next) => {
 		res.status(400).send(error.message);
 	}
 };
+
+exports.getUser = async (req, res, next) => {
+	try {
+		const id = req.params.id;
+		const user = await admin.collection('users').doc(id);
+		const data = await user.get();
+		if (!data.exists) {
+			res.status(400).send('User with the given ID not found');
+		} else {
+			res.send(data.data());
+		}
+	} catch (error) {
+		res.status(400).send(error.message);
+	}
+};

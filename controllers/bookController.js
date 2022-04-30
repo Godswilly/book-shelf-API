@@ -3,11 +3,18 @@ const Book = require('../models/bookModel');
 
 exports.createBook = async (req, res, next) => {
 	try {
-		const data = req.body;
-		await admin.collection('books').doc().set(data);
-		res.send('Record saved successfully');
+		const book = req.body;
+		await admin.collection('books').doc().set(book);
+
+		res.status(200).json({
+			status: 'success',
+			data:	book,
+		});
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(404).json({
+			status: 'fail',
+			message: error,
+		});
 	}
 };
 
@@ -32,10 +39,17 @@ exports.getAllBooks = async (req, res, next) => {
 				);
 				booksArray.push(book);
 			});
-			res.send(booksArray);
+
+			res.status(200).json({
+				status: 'success',
+					data: booksArray,
+			});
 		}
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(404).json({
+			status: 'fail',
+			message: error,
+		});
 	}
 };
 
@@ -47,22 +61,32 @@ exports.getBook = async (req, res, next) => {
 		if (!data.exists) {
 			res.status(400).send('Book with the given ID not found');
 		} else {
-			res.send(data.data());
+			res.status(200).send({data:data.data()});
 		}
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(404).json({
+			status: 'fail',
+			message: error,
+		});
 	}
 };
 
 exports.updateBook = async (req, res, next) => {
 	try {
 		const id = req.params.id;
-		const data = req.body;
+		const bookData = req.body;
 		const book = await admin.collection('books').doc(id);
-		await book.update(data);
-		res.send('Book record updated successfully');
+		await book.update(bookData);
+		
+		res.status(200).json({
+			status: 'success',
+				data: bookData,
+		});
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(404).json({
+			status: 'fail',
+			message: error,
+		});
 	}
 };
 
@@ -70,8 +94,15 @@ exports.deleteBook = async (req, res, next) => {
 	try {
 		const id = req.params.id;
 		await admin.collection('books').doc(id).delete();
-		res.send('Book record deleted successfully');
+
+		res.status(204).json({
+      status: 'success',
+      data: null,
+    });
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(404).json({
+			status: 'fail',
+			message: error,
+		});
 	}
 };

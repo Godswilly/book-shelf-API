@@ -12,12 +12,6 @@ const userValidationRules = () => {
 			.withMessage('Password is invalid')
 			.isLength({ min: 5 })
 			.withMessage('Password is too short'),
-		body('passwordConfirm')
-			.notEmpty()
-			.withMessage('Password is required')
-			.withMessage('Password is invalid')
-			.isLength({ min: 5 })
-			.withMessage('Password is too short'),
 		body('name')
 			.notEmpty()
 			.withMessage('Name is required')
@@ -52,7 +46,7 @@ const bookValidationRules = () => {
 			.isDate({ format: 'DD-MM-YYYY' })
 			.withMessage('Publication date is invalid'),
 		body('isArchived').isBoolean(false).withMessage('Archived is invalid'),
-		body('bookCover').optional(),
+		body('bookCover').isString(),
 		body('categories')
 			.isIn(['comic', 'fantasy', 'action', 'thriller', 'contemporary'])
 			.withMessage('Select one from the options'),

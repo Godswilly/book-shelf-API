@@ -1,15 +1,15 @@
 const admin = require('../db');
 const User = require('../models/userModel');
 
-// exports.createUser = async (req, res, next) => {
-// 	try {
-// 		const data = req.body;
-// 		await admin.collection('users').doc().set(data);
-// 		res.send('User saved successfully');
-// 	} catch (error) {
-// 		res.status(400).send(error.message);
-// 	}
-// };
+exports.createUser = async (req, res, next) => {
+	try {
+		const data = req.body;
+		await admin.collection('users').doc().set(data);
+		res.send('User saved successfully');
+	} catch (error) {
+		res.status(400).send(error.message);
+	}
+};
 
 exports.getAllUsers = async (req, res, next) => {
 	try {
@@ -24,15 +24,21 @@ exports.getAllUsers = async (req, res, next) => {
 					doc.id,
 					doc.data().name,
 					doc.data().email,
-					doc.data().password,
-					doc.data().passwordConfirm
+					doc.data().password
 				);
 				usersArray.push(user);
 			});
-			res.send(usersArray);
+
+			res.status(200).json({
+				status: 'success',
+				data: usersArray,
+			});
 		}
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(404).json({
+			status: 'fail',
+			message: error,
+		});
 	}
 };
 
@@ -44,10 +50,13 @@ exports.getUser = async (req, res, next) => {
 		if (!data.exists) {
 			res.status(400).send('User with the given ID not found');
 		} else {
-			res.send(data.data());
+			res.status(200).send({ data: data.data() });
 		}
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(404).json({
+			status: 'fail',
+			message: error,
+		});
 	}
 };
 
@@ -57,9 +66,16 @@ exports.updateUser = async (req, res, next) => {
 		const data = req.body;
 		const user = await admin.collection('users').doc(id);
 		await user.update(data);
-		res.send('User record updated successfully');
+
+		res.status(200).json({
+			status: 'success',
+			data: data,
+		});
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(404).json({
+			status: 'fail',
+			message: error,
+		});
 	}
 };
 
@@ -67,8 +83,15 @@ exports.deleteUser = async (req, res, next) => {
 	try {
 		const id = req.params.id;
 		await admin.collection('users').doc(id).delete();
-		res.send('User record deleted successfully');
+
+		res.status(204).json({
+			status: 'success',
+			data: null,
+		});
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(404).json({
+			status: 'fail',
+			message: error,
+		});
 	}
 };

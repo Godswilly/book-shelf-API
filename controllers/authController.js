@@ -1,12 +1,20 @@
-const admin = require('../db');
-const User = require('../models/userModel');
+const db = require('../db');
 
-exports.signup = async (req, res, next) => {
-  try {
-		const data = req.body;
-		await admin.collection('users').doc().set(data);
-		res.send('User saved successfully');
-	} catch (error) {
-		res.status(400).send(error.message);
+function authMiddleware(request, response, next) {
+	const headerToken = request.headers.authorization;
+	if (!headerToken) {
+		return response.send({ message: 'No token provided' }).status(401);
 	}
-};
+
+	if (headerToken && headerToken.split(' ')[0] !== 'Bearer') {
+		response.send({ message: 'Invalid token' }).status(401);
+	}
+
+	const token = headerToken.split(' ')[1];
+	db.auth()
+		.verifyIdToken(token)
+		.then(() => next())
+		.catch(() => response.send({ message: 'Could not authorize' }).status(403));
+}
+
+module.exports = { authMiddleware };
